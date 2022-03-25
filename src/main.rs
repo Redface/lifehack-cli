@@ -12,6 +12,11 @@ struct ActivityResponse {
     activity: String,
 }
 
+#[derive(Deserialize, Debug)]
+struct ChuckNorrisResponse {
+    value: String,
+}
+
 async fn call_api<T>(url: String) -> reqwest::Result<T>
     where T: serde::de::DeserializeOwned
 {
@@ -31,10 +36,15 @@ async fn call_activity() -> reqwest::Result<ActivityResponse> {
     call_api(String::from("https://www.boredapi.com/api/activity")).await
 }
 
+async fn call_chuck_norris_fact() -> reqwest::Result<ChuckNorrisResponse> {
+    call_api(String::from("https://api.chucknorris.io/jokes/random")).await
+}
+
 fn display_menu() {
     println!("Menu: ");
-    println!("1. Random daily joke ");
-    println!("2. Activity recommendation ");
+    println!("1. Random daily joke");
+    println!("2. Activity recommendation");
+    println!("3. Chuck Norris Facts");
     println!("q: Quit");
 }
 
@@ -66,6 +76,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let result = call_activity().await;
                 let ok_cb = |data: ActivityResponse| {
                     println!("{}", data.activity);
+                };
+                handle_ok_match(result, ok_cb);
+            }
+            "3" => {
+                let result = call_chuck_norris_fact().await;
+                let ok_cb = |data: ChuckNorrisResponse| {
+                    println!("{}", data.value);
                 };
                 handle_ok_match(result, ok_cb);
             }
