@@ -33,7 +33,7 @@ async fn call_joke() -> reqwest::Result<JokeResponse> {
 }
 
 async fn call_activity() -> reqwest::Result<ActivityResponse> {
-    call_api(String::from("https://www.boredapi.com/api/activity")).await
+    call_api(String::from("https://bored-api.appbrewery.com/random")).await
 }
 
 async fn call_chuck_norris_fact() -> reqwest::Result<ChuckNorrisResponse> {
@@ -90,7 +90,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("Bye!");
                 break;
             }
-            _ => {}
+            _ => {
+                println!("Selected menu does not exist");
+            }
         }
         menu_buffer.clear();
         display_menu();
